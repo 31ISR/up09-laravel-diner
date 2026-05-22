@@ -16,7 +16,7 @@ class Task extends Model
         "category_id"
     ];
 
-    prorected $casts = [
+    protected $casts = [
         'due_date'=>'date'
     ];
     
@@ -25,7 +25,7 @@ class Task extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function user()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
