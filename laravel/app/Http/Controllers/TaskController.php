@@ -2,23 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index()
     {
+        /**
+         * @var User $user
+         */
+        $user = Auth::user();
+        $tasks = $user->tasks()
+            ->with('category')
+            ->latest()
+            ->paginate(10);
 
+        return view('tasks.index', compact('tasks'));
     }
 
     public function store()
     {
+        /**
+         * @var User $user
+         */
+        $user = Auth::user();
+        $validate = $request->validate([
+            'title'=>'required|string|max:255',
+            'description'=>'nullable|string',
+            'status'=>'required|in:pending,in_progress,done',
+            'priority'=>'required|in:low,medium,high',
+            'due_data'=>'nullable|date|',
+            'category_id'=>'nullable|string|max:255',
 
     }
 
     public function create()
     {
-
+        /**
+         * @var User $user
+         */
+        $user = Auth::user();
+        $categories = $user->categories()->get();
+        return view('tasks.create', compact('categories'));
     }
 
     public function edit()
