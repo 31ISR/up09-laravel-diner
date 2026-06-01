@@ -29,10 +29,10 @@ class TaskController extends Controller
         $data = $request->validate([
             'title'=>'required|string|max:255',
             'description'=>'nullable|string',
-            'status'=>'required|in:pending,in_progress.done',
+            'status'=>'required|in:pending,in_progress,done',
             'priority'=>'required|in:low,medium,high',
             'due_data'=>'nullable|date|after_or_equal:now',
-            'category_id'=>'nullable|exists:category,id',
+            'category_id'=>'nullable|exists:categories,id',
         ]);
 
         /**
@@ -46,9 +46,7 @@ class TaskController extends Controller
 
     public function create()
     {
-        /**
-         * @var User $user
-         */
+        /** @var User $user  */
         $user = Auth::user();
         $categories = $user->categories()->get();
         return view('tasks.create', compact('categories'));
@@ -72,7 +70,7 @@ class TaskController extends Controller
         $data = $request->validate([
             'title'=>'required|string|max:255',
             'description'=>'nullable|string',
-            'status'=>'required|in:pending,in_progress.done',
+            'status'=>'required|in:pending,in_progress,done',
             'priority'=>'required|in:low,medium,high',
             'due_data'=>'nullable|date|after_or_equal:now',
             'category_id'=>'nullable|exists:category,id',
@@ -94,4 +92,5 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success','Задача удалена');
 
     }
+    
 }
